@@ -1,0 +1,11 @@
+com.itheima.ruiky
+com.itheima.ruiky.common
+com.itheima.ruiky.config
+com.itheima.ruiky.controller
+com.itheima.ruiky.dto
+com.itheima.ruiky.entity
+com.itheima.ruiky.filter
+com.itheima.ruiky.mapper
+com.itheima.ruiky.service
+com.itheima.ruiky.service.impl
+com.itheima.ruiky.utils

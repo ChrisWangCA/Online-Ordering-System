@@ -1,0 +1,8 @@
+Author: Chris Wang
+Version: July 19, 2022
+
+Please see Program Introduction for function introduction
+
+Notes:
+Replace the path of application.yml under resources with a custom path.
+Receive verification code in console after user login screen sends verification code.
