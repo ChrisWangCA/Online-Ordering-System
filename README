@@ -4,5 +4,6 @@ Version: July 19, 2022
 Please see Program Introduction.docx for function introduction
 
 Notes:
+Import data into Mysql before use.
 Replace the path of application.yml under resources with a custom path.
 Receive verification code in console after user login screen sends verification code.
