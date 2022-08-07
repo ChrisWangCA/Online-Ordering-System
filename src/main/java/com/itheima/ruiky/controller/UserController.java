@@ -12,6 +12,7 @@ import com.itheima.ruiky.utils.ValidateCodeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/user")
@@ -28,6 +30,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     /**
      * Send cell phone SMS verification code
@@ -43,9 +48,10 @@ public class UserController {
             String code = ValidateCodeUtils.generateValidateCode(4).toString();
             log.info("code={}",code);
 
-
             //Need to save the generated captcha to Session
-            session.setAttribute(phone,code);
+//            session.setAttribute(phone,code);
+
+            stringRedisTemplate.opsForValue().set(phone,code,5, TimeUnit.MINUTES);
 
             return R.success("Verification code sent successfully");
         }
@@ -70,7 +76,9 @@ public class UserController {
         String code = map.get("code").toString();
 
         //Get the saved authentication code from Session
-        Object codeInSession = session.getAttribute(phone);
+//        Object codeInSession = session.getAttribute(phone);
+
+        String codeInSession = stringRedisTemplate.opsForValue().get(phone);
 
         //Perform verification code comparison (verification code submitted by the page and the verification code saved in Session)
         if(codeInSession != null && codeInSession.equals(code)){
@@ -88,6 +96,7 @@ public class UserController {
                 userService.save(user);
             }
             session.setAttribute("user",user.getId());
+            stringRedisTemplate.delete(phone);
             return R.success(user);
         }
         return R.error("Login failure");
