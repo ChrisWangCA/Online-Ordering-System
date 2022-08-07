@@ -4,11 +4,13 @@
 package com.itheima.ruiky.common;
 
 import lombok.Data;
+
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 @Data
-public class R<T> {
+public class R<T> implements Serializable {
 
     private Integer code; //Code: 1 for success, 0 and other numbers for failure
 
